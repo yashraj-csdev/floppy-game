@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Web Floppy Game</title>
+
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      background: #87CEEB;
+      text-align: center;
+      font-family: Arial;
+    }
+    canvas {
+      background: #87CEEB;
+      display: none;
+      margin: auto;
+    }
+  </style>
+</head>
+
+<body>
+
+<h3>Upload Images</h3>
+
+Bird Image:
+<input type="file" id="birdInput" accept="image/*"><br><br>
+
+Pipe Image:
+<input type="file" id="pipeInput" accept="image/*"><br><br>
+
+<button id="startBtn">START GAME</button>
+
+<br><br>
+
+<canvas id="gameCanvas" width="400" height="600"></canvas>
+
+<script>
+  document.getElementById("startBtn").onclick = async () => {
+    document.getElementById("startBtn").disabled = true;
+    document.getElementById("gameCanvas").style.display = "block";
+
+    window.pyodide = await loadPyodide();
+    const code = await fetch("game.py").then(r => r.text());
+    await pyodide.runPythonAsync(code);
+  };
+</script>
+
+</body>
+</html>
